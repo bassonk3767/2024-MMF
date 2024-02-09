@@ -1,0 +1,3 @@
+# Functions...
+def instructions():
+    print("\n\n Do you know how to buy a ticket?")

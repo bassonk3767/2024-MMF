@@ -1,5 +1,6 @@
 # Functions...
 
+# Yes no checker
 def yes_no(question):
 
     while True:

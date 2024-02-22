@@ -3,14 +3,17 @@
 # A function that checks if user input is blank
 def not_blank(question):
 
-    # The user's input
-    response = input(question)
+    # Looping to get user's answer
+    while True:
 
-    # Checking if user has entered empty text
-    if response == "":
-        print("\nSorry, this can't be blank. please try again")
-    else:
-        return response
+        # The user's input
+        response = input(question)
+
+        # Checking if user has entered empty text
+        if response == "":
+            print("\nSorry, this can't be blank. please try again")
+        else:
+            return response
 
 # Main routine...
 

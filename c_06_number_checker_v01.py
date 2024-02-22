@@ -1,15 +1,16 @@
-# Number checker:
-#   - Loops through the select amount of tickets
+# Functions...
 
-#   - Assigns the total price based on the user's ticket
+# Checks if a user enters an integer to a given question
+def num_check(question):
 
-#   - The "ticket_of_choice" variable stores an integer that corresponds
-#     to the type of ticket that the user has
+    while True:
 
-def ticket_loop(number_of_tickets,ticket_of_choice):
+        try:
+            response = int(input(question))
+            return response
 
-    # Total price
-    total = 0
+        except ValueError:
+            print("\nPlease enter an integer")
 
-    for i in number_of_tickets:
-        break
+
+# Main routine...

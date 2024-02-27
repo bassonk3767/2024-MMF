@@ -5,6 +5,7 @@ def num_check(question):
 
     while True:
 
+        # Checks if user enters an integer
         try:
             response = int(input(question))
             return response

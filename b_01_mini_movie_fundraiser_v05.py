@@ -1,3 +1,6 @@
+# Imports...
+import pandas as pd
+
 # Functions...
 
 # Checks if user has entered yes / no to a question
@@ -24,7 +27,7 @@ def calc_ticket_price(user_age):
         price = 7.5
 
     # Ticket price is $10.50 for users between 16 and 64
-    elif user_age > 16 and user_age < 65:
+    elif 16 < user_age < 65:
         price = 10.5
 
     # Ticket price is $6.50 for seniors (65+)

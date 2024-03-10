@@ -37,3 +37,7 @@ for case in range(0, 5):
     want_instructions = string_checker("\nDo you want to read the"
                                        "instructions?", 1, yes_no_list)
     print(f"You chose {want_instructions}")
+
+for case in range(0, 5):
+    paymethod = string_checker("\nPayment Method: ", 2, payment_list)
+    print(f"You chose {paymethod}")

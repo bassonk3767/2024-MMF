@@ -27,7 +27,7 @@ def calc_ticket_price(user_age):
         price = 7.5
 
     # Ticket price is $10.50 for users between 16 and 64
-    elif 16 < user_age < 65:
+    elif 16 <= user_age < 65:
         price = 10.5
 
     # Ticket price is $6.50 for seniors (65+)
@@ -81,7 +81,7 @@ def cash_credit(question):
 
         # If the user doesn't enter any of the payment options
         else:
-            print("\nPlease choose a valid payment method")
+            print("\nPlease choose a valid payment method.")
 
 
 # Checks that users enter a valid response (e.g yes / no
@@ -90,6 +90,11 @@ def string_checker(question, num_letters, valid_response):
 
     # Error message
     error = f"\nPlease choose {valid_response[0]} or {valid_response[1]}"
+
+    if num_letters == 1:
+        short_version = 1
+    else:
+        short_version = 2
 
     while True:
 
@@ -106,20 +111,37 @@ def string_checker(question, num_letters, valid_response):
         print(error)
 
 
+# Currency formatting function
+def currency(x):
+    return "${:.2f}".format(x)
+
+
 # Main routine...
 
 
 # Set maximum number of tickets below
-MAX_TICKETS = 3
+MAX_TICKETS = 100
 tickets_sold = 0
 
 # Options listed
 yes_no_list = ["yes", "no"]
 payment_list = ["cash", "credit"]
 
+# Dictionaries used to hold ticket details
+all_names = []
+all_ticket_costs = []
+all_surcharge = []
+
+# History of the users that bought a ticket
+mini_movie_dict = {
+    "Name": all_names,
+    "Ticket price": all_ticket_costs,
+    "Surcharge": all_surcharge,
+}
+
 # Ask user if they want to see the instructions
 want_instructions = string_checker("\nDo you want to read the "
-                           "instructions?\n~~~ ", 1, yes_no_list)
+                                   "instructions?\n~~~ ", 1, yes_no_list)
 
 if want_instructions == "yes":
     print("\nInstructions go here...")
@@ -150,12 +172,47 @@ while tickets_sold < MAX_TICKETS:
 
     # Calculate ticket cost
     ticket_cost = calc_ticket_price(age)
+
     print("\nage: {}, ticket price: ${:.2f}".format(age, ticket_cost))
+
+    # Get payment method
+    payment_method = cash_credit("\nChoose a payment method (cash"
+                                 " or credit)\n~~~ ")
+
+    if payment_method == "cash":
+        surcharge = 0
+    else:
+        # Calculate 5% surcharge if users are paying by credit card
+        surcharge = ticket_cost * 0.05
 
     tickets_sold += 1
 
-    payment_method = cash_credit("\nChoose a payment method (cash"
-                                 " or credit)\n~~~ ")
+    # add ticket name, cost and surcharge to lists
+    all_names.append(name)
+    all_ticket_costs.append(ticket_cost)
+    all_surcharge.append(surcharge)
+
+    # Plugging in the data into a data frame/sheet
+    mini_movie_data = pd.DataFrame(mini_movie_dict)
+    mini_movie_data = mini_movie_data.set_index("Name")
+
+    # Calculate the total ticket cost (ticket + surcharge)
+    mini_movie_data["Total"] = mini_movie_data["Surcharge"] \
+                               + mini_movie_data["Ticket price"]
+
+    # Calculate the profit for each ticket
+    mini_movie_data["Profit"] = mini_movie_data["Ticket price"] - 5
+
+    # Calculate total values of tickets and profits
+    total = mini_movie_data["Total"].sum()
+    profit = mini_movie_data["Profit"].sum()
+
+    # Currency formatting (uses currency)
+    add_dollars = ["Ticket price", "Surcharge", "Total", "Profit"]
+
+    # Adding dollar signs
+    for var_item in add_dollars:
+        mini_movie_data[var_item] = mini_movie_data[var_item].apply(currency)
 
 # Output number of tickets sold
 if tickets_sold == MAX_TICKETS:

@@ -27,7 +27,7 @@ mini_movie_data["Total"] = mini_movie_data["Surcharge"] \
                            + mini_movie_data["Ticket price"]
 
 # Calculate the profit made for each ticket sold
-mini_movie_data["Profit"] = mini_movie_["Ticket price"] - 5
+mini_movie_data["Profit"] = mini_movie_data["Ticket price"] - 5
 
 # Choose a winner from our name list
 winner_name = rnd.choice(all_names)
@@ -35,4 +35,13 @@ winner_name = rnd.choice(all_names)
 # Get position of the winner's name in the list
 win_index = all_names.index(winner_name)
 
-# Look up the total amount lost
+# Look up the total amount won
+total_won = mini_movie_data.at[win_index, "Total"]
+
+# Set index at end (before printing)
+mini_movie_data = mini_movie_data.set_index("Name")
+print(mini_movie_data)
+
+print("\n---- Raffle winner ----")
+print("\nCongratulations {}! You have won ${}\nie:"
+      " Your ticket is free!".format(winner_name, total_won))

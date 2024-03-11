@@ -1,5 +1,7 @@
 # Imports...
 import pandas as pd
+import random as rnd
+
 
 # Functions...
 
@@ -27,7 +29,7 @@ def calc_ticket_price(user_age):
         price = 7.5
 
     # Ticket price is $10.50 for users between 16 and 64
-    elif 16 < user_age < 65:
+    elif 16 <= user_age < 65:
         price = 10.5
 
     # Ticket price is $6.50 for seniors (65+)
@@ -81,7 +83,7 @@ def cash_credit(question):
 
         # If the user doesn't enter any of the payment options
         else:
-            print("\nPlease choose a valid payment method.\n{}".format())
+            print("\nPlease choose a valid payment method.")
 
 
 # Checks that users enter a valid response (e.g yes / no
@@ -120,7 +122,7 @@ def currency(x):
 
 
 # Set maximum number of tickets below
-MAX_TICKETS = 3
+MAX_TICKETS = 100
 tickets_sold = 0
 
 # Options listed
@@ -134,7 +136,7 @@ all_surcharge = []
 
 # History of the users that bought a ticket
 mini_movie_dict = {
-    "Name(s)": all_names,
+    "Name": all_names,
     "Ticket price": all_ticket_costs,
     "Surcharge": all_surcharge,
 }
@@ -177,13 +179,13 @@ while tickets_sold < MAX_TICKETS:
 
     # Get payment method
     payment_method = cash_credit("\nChoose a payment method (cash"
-                                 " or credit)\n~~~ ", 2, payment_list)
+                                 " or credit)\n~~~ ")
 
-    if pay_method == "cash":
-        all_surcharge = 0
+    if payment_method == "cash":
+        surcharge = 0
     else:
         # Calculate 5% surcharge if users are paying by credit card
-        all_surcharge = ticket_cost * 0.05
+        surcharge = ticket_cost * 0.05
 
     tickets_sold += 1
 
@@ -194,11 +196,10 @@ while tickets_sold < MAX_TICKETS:
 
     # Plugging in the data into a data frame/sheet
     mini_movie_data = pd.DataFrame(mini_movie_dict)
-    mini_movie_data = mini_movie_data.set_index("Name")
 
     # Calculate the total ticket cost (ticket + surcharge)
     mini_movie_data["Total"] = mini_movie_data["Surcharge"] \
-                               + mini_movie_data["Ticket price"]
+                             + mini_movie_data["Ticket price"]
 
     # Calculate the profit for each ticket
     mini_movie_data["Profit"] = mini_movie_data["Ticket price"] - 5
@@ -212,20 +213,31 @@ while tickets_sold < MAX_TICKETS:
 
     # Adding dollar signs
     for var_item in add_dollars:
-        mini_movie_data[var_item] = mini_movie_data[var_item].apply(currency("$"))
+        mini_movie_data[var_item] = mini_movie_data[var_item].apply(currency)
 
-    print("\n~~~~~ Ticket data ~~~~~")
+    # Choose a winner from our name list
+    winner_name = rnd.choice(all_names)
 
-    # Output ticket data in a table
+    # Get position of the winner's name in the list
+    win_index = all_names.index(winner_name)
+
+    # Look up the total amount won
+    total_won = mini_movie_data.at[win_index, "Total"]
+
+    # Set index at end (before printing)
+    mini_movie_data = mini_movie_data.set_index("Name")
+    print("\n---- Ticket info ----")
     print(mini_movie_data)
 
-    # Output total ticket sales and profit
-    print("\nTotal ticket sales: ${:.2f}".format(total))
-    print("Total profit: ${:.2f}".format(profit))
+    print("\n---- Raffle winner ----")
+    print("\nCongratulations {}! You have won ${}\nie:"
+          " Your ticket is free!".format(winner_name, total_won))
+
+    print("\nTotal ticket cost: ${}, Total profit: ${}".format(total, profit))
 
 # Output number of tickets sold
 if tickets_sold == MAX_TICKETS:
     print("\nCongratulations! You have sold all the tickets,")
 else:
     print("\nYou have sold {} tickets. There is {} tickets "
-         "remaining.".format(tickets_sold, MAX_TICKETS-tickets_sold))
+          "remaining.".format(tickets_sold, MAX_TICKETS-tickets_sold))

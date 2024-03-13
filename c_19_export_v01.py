@@ -49,6 +49,10 @@ year = today.strftime("xy")
 heading = "The current data is {}/{}/{}".format(day, month, year)
 filename = "MMF.{}.{}.{}".format(year, month, day)
 
+sales_status = "\n*** All the tickets have been sold ***"
+
+
+
 # Change the frame to a string so that it can be exported to a file
 mini_movie_string = pd.DataFrame.to_string(mini_movie_frame)
 
@@ -56,3 +60,6 @@ mini_movie_string = pd.DataFrame.to_string(mini_movie_frame)
 ticket_cost_heading = "\n---- Ticket cost / profit"
 total_ticket_sales = "Total ticket sales: ${}".format(total)
 total_profit = "Total profit: ${}".format(profit)
+
+to_write = {heating, mini_movie_string, heading, total_ticket_sales,
+            total_profit, }

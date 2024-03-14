@@ -26,6 +26,10 @@ mini_movie_data["Total"] = mini_movie_data["Surcharge"] \
 # Calculate the profit made for each ticket sold
 mini_movie_data["Profit"] = mini_movie_data["Ticket price"] - 5
 
+# Calculate thge ticket and profit totals
+total = mini_movie_data["Total"].sum()
+profit = mini_movie_data["Profit"].sum()
+
 # Choose a winner from our name list
 winner_name = rnd.choice(all_names)
 
@@ -34,6 +38,7 @@ win_index = all_names.index(winner_name)
 
 # Look up the total amount won
 total_won = mini_movie_data.at[win_index, "Total"]
+
 
 # Set index at end (before printing)
 mini_movie_data = mini_movie_data.set_index("Name")
@@ -51,15 +56,27 @@ filename = "MMF.{}.{}.{}".format(year, month, day)
 
 sales_status = "\n*** All the tickets have been sold ***"
 
-
+winner_heading = "\n---- Raffle winner ----"
+winner_text = "The winner of the raffle is {}. " \
+               "They have won ${}. ie: Their ticket is " \
+               "free!".format(winner_name, total_won)
 
 # Change the frame to a string so that it can be exported to a file
-mini_movie_string = pd.DataFrame.to_string(mini_movie_frame)
+mini_movie_string = pd.DataFrame.to_string(mini_movie_data)
 
 # Create strings for printing
 ticket_cost_heading = "\n---- Ticket cost / profit"
-total_ticket_sales = "Total ticket sales: ${}".format(total)
+total_ticket_sales = "\nTotal ticket sales: ${}".format(total_won)
 total_profit = "Total profit: ${}".format(profit)
 
-to_write = {heating, mini_movie_string, heading, total_ticket_sales,
-            total_profit, }
+to_write = {heading, mini_movie_string, total_ticket_sales,
+            total_profit, winner_heading, winner_text}
+
+# write output to file
+# Create file to hold data (add .txt extension)
+write_to = "{}.txt".format(filename)
+text_file = open(write_to, "w+")
+
+for item in to_write:
+    text_file.write(item)
+    text_file.write("\n")

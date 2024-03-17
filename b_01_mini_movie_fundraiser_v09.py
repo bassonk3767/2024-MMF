@@ -118,6 +118,15 @@ def currency(x):
     return "${:.2f}".format(x)
 
 
+# A function that shows the instructions
+def show_instructions():
+    print("\n***** Instructions *****")
+    print("\nFor each ticket, enter...")
+    print("\n - Age (between 12 and 120)")
+    print("\n - Payment method")
+    print("\n\nWhen ypu have entered all the users, press 'xxx' to quit.")
+    print("\n\nThe program will then display the ticket details")
+
 # Main routine...
 
 
